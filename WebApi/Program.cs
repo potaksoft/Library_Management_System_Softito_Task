@@ -1,3 +1,8 @@
+using Entities.Models.BaseModel;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Repositories.EfCore;
+
 namespace WebApi
 {
     public class Program
@@ -6,10 +11,15 @@ namespace WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddDbContext<RepositoryContext>(options => options.UseSqlServer
+            (builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<RepositoryContext>
+            ().AddDefaultTokenProviders();
+
+            
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
